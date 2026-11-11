@@ -12,6 +12,10 @@ const SEED_USERS: User[] = [
 let users: User[] = [];
 
 export const userRepository = {
+  findById(id: number): User | undefined {
+    return users.find((u) => u.id === id);
+  },
+
   findByEmail(email: string): User | undefined {
     return users.find((u) => u.email === email);
   },
@@ -24,6 +28,15 @@ export const userRepository = {
     const user: User = { id: users.length + 1, ...data };
     users.push(user);
     return user;
+  },
+
+  // Замінює запис новим об'єктом, щоб не змінювати User, які викликач уже тримає.
+  updateEmail(id: number, email: string): User {
+    const index = users.findIndex((u) => u.id === id);
+    if (index === -1) throw new Error(`User ${id} not found`);
+    const updated: User = { ...users[index], email };
+    users[index] = updated;
+    return updated;
   },
 
   // Повертає сховище до початкових даних. Використовується в тестах.
