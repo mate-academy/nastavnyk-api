@@ -1,7 +1,7 @@
 import { RegistrationError, FieldErrors } from "./errors";
 import { userRepository, User } from "../users/userRepository";
-import { lengthBetween, matches, validate } from "../validation/rules";
-import { EMAIL_PATTERN } from "../validation/patterns";
+import { lengthBetween, validate } from "../validation/rules";
+import { normalizeEmail, validateEmail } from "../validation/email";
 
 export interface RegisterInput {
   email: string;
@@ -10,10 +10,10 @@ export interface RegisterInput {
 }
 
 export function registerUser(input: RegisterInput): User {
-  const email = input.email.trim().toLowerCase();
+  const email = normalizeEmail(input.email);
 
   const fields: FieldErrors = {};
-  const emailErrors = validate(email, [matches(EMAIL_PATTERN, "must be a valid email")]);
+  const emailErrors = validateEmail(email);
   const passwordErrors = validate(input.password, [lengthBetween(8, 72)]);
   if (emailErrors.length) fields.email = emailErrors;
   if (passwordErrors.length) fields.password = passwordErrors;
