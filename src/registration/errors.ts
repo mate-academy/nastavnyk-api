@@ -1,18 +1,7 @@
-export type RegistrationErrorCode = "INVALID_INPUT" | "EMAIL_TAKEN";
-
-export const REGISTRATION_MESSAGES: Record<RegistrationErrorCode, string> = {
-  INVALID_INPUT: "Please check the highlighted fields",
-  EMAIL_TAKEN: "Email already registered",
-};
-
-export type FieldErrors = Record<string, string[]>;
-
-export class RegistrationError extends Error {
-  constructor(
-    public readonly code: RegistrationErrorCode,
-    public readonly fields: FieldErrors = {},
-  ) {
-    super(REGISTRATION_MESSAGES[code]);
-    this.name = "RegistrationError";
-  }
-}
+// Помилки винесено в спільний модуль users/errors.ts.
+// Старі імена залишено як аліаси для зворотної сумісності.
+export {
+  UserError as RegistrationError,
+  USER_ERROR_MESSAGES as REGISTRATION_MESSAGES,
+} from "../users/errors";
+export type { FieldErrors, UserErrorCode as RegistrationErrorCode } from "../users/errors";
